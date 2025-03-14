@@ -1,30 +1,109 @@
-# esbuild-typescript-library-template
+# ts-d2
 
-A template for building a library through typescript and bundling it through esbuild.
+This is the TypeScript version of the [Deuterium](https://www.d2lib.io) library.
 
-Uses yarn v3.1 alongside latest pnp support.
+Deuterium is a "document as code" library, which allows you to create format-independent documents, which then are converted into a specific format using the three components DocFrame, docPIPE and docTYPE.
 
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/esbuild-typescript-library-template?logo=files&style=for-the-badge)
-![npm](https://img.shields.io/npm/v/esbuild-typescript-library-template?logo=npm&style=for-the-badge)
-![node-current](https://img.shields.io/badge/Node-%3E=14-success?style=for-the-badge&logo=node)
-![npm](https://img.shields.io/npm/dw/esbuild-typescript-library-template?style=for-the-badge)
+The following output formats are supported:
+* HTML
+* PDF (including PDF/UA support)
+* Plaintext
+* Images (BMP, PNG and more)
+* PostScript
 
-## Getting started
+This is a small example creating a document with the content "Hello World" as PDF:
 
-1. `git clone git@github.com:spa5k/esbuild-typescript-library-template.git my-project`
-2. `cd my-project`
-3. `yarn install`
+```typescript
+import * as fs from "fs";
+import Deuterium from "ts-d2";
 
-### Releasing
+new Deuterium.Content.Document("Hello World")
+  .convertTo(Deuterium.OutputFormat.PDF)
+  .then(async (buffer) => {
+    // save blob to file
+    fs.writeFileSync("output.pdf", Buffer.from(await buffer.arrayBuffer()));
+  });
+```
 
-Under the hood, this library uses [semantic-release](https://github.com/semantic-release/semantic-release) and [commitizen](https://github.com/commitizen/cz-cli).
-The goal is to avoid manual release process. Using `semantic-release` will automatically create a github release (hence tags) as well as an npm release.
-Based on your commit history, `semantic-release` will automatically create a patch, feature or breaking release.
+# Basics
 
-### Visualization of this Repo.
+Documents are divided into DocumentElements, which are the smallest part of a document (like text, vertical space, etc.).
 
-![Visualization of this repo](./diagram.svg)
+DocumentElements also may be branch elements and therefore have child-elements (like tables, paragraphs, etc.).
 
-Commands:
+DocumentElements may be grouped together to a document, which then may be converted to the desired output format.
 
-- `semantic-release`: triggers a release (used in CI)
+All the supported DocumentElements are placed in the package `Deuterium.Content`.
+
+## Leaf elements
+
+The following leaf elements are currently supported:
+* Barcode
+* ColumnDefinition (only useful for page-based formats)
+* Directory
+* Footer
+* Formatted (may be used to directly insert docTYPE code and/or HTML code)
+* Header
+* Pagebreak
+* PageDefinition (only useful for page-based formats)
+* Paragraph
+* SpaceVertically
+* Span
+* Table
+* TableCell
+* TableRow
+* Text
+
+Any leaf element may be added to multiple branch elements (there is no connection from a leaf element to its parent element).
+
+### Text
+
+To create a text element you may use the following code:
+
+```typescript
+new Deuterium.Content.Text("Hello World!")
+```
+
+The text may then be added to any branch element.
+
+When creating branch elements, you may also pass strings directly in order to create a text element.
+
+```typescript
+new Deuterium.Content.Span("Hello World!", {
+  bold: true
+});
+```
+
+## Branch elements
+
+Branch elements have two functionalities:
+* Group elements together (like Directory)
+* Apply formatting/properties to their child elements.
+
+The following branch elements are supported:
+* Directory
+* Document
+* Footer
+* Formatted
+* Header
+* Paragraph
+* Span
+* Table
+* TableCell
+* TableRow
+
+### Content parameter
+
+When creating branch document elements, the first parameter is the so called "content" parameter, which is used to define the child elements of the new branch document element.
+
+The content parameter may be one of the following:
+
+* string -> Creates a Text Document Element for the given string
+* DocumentElement -> Just uses the passed DocumentElement
+* (DocumentElement | string)[] -> Uses all the passed DocumentElements (and converts passed strings to Text objects)
+
+Especially the first variant of the content parameter can result in small code:
+
+```typescript
+new Deuterium.Content.Footer("...");
+```
