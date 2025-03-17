@@ -1,6 +1,6 @@
 {
   "name": "ts-d2",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Deuterium is a TypeScript library for professional output creation.",
   "keywords": [
     "pdf",
@@ -69,12 +69,12 @@
     "ts-jest": "^29.2.6",
     "tslib": "2.8.1",
     "tsup": "8.4.0",
-    "typescript": "5.8.2",
-    "uuid": "^11.1.0"
+    "typescript": "5.8.2"
   },
   "dependencies": {
     "axios": "^1.8.3",
     "docframe-types": "^0.4.2",
-    "form-data": "^4.0.2"
+    "form-data": "^4.0.2",
+    "uuid": "^11.1.0"
   }
 }
