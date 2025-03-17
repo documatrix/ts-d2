@@ -1,6 +1,6 @@
 {
   "name": "ts-d2",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Deuterium is a TypeScript library for professional output creation.",
   "keywords": [
     "pdf",
