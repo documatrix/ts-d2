@@ -1,4 +1,4 @@
-export enum OutputFormat {
+enum OutputFormat {
   PDF = "pdf",
   PNG = "png",
   JPEG = "jpeg",
@@ -7,7 +7,7 @@ export enum OutputFormat {
   TEXT = "text",
 }
 
-export interface OutputParams {
+type OutputParams = {
   [OutputFormat.HTML]: {};
   [OutputFormat.PDF]: {};
   [OutputFormat.JPEG]: {};
@@ -32,4 +32,9 @@ export interface OutputParams {
      */
     dpi?: number;
   };
+}
+
+export {
+  OutputFormat,
+  OutputParams,
 }

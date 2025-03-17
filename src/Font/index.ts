@@ -10,6 +10,8 @@ export class Font {
   public toDocFrame(): ProtoFont {
     return ProtoFont.create({
       name: this.name,
+      // TODO: suppot font mapping for docframe step
+      id: 5
     });
   }
 }

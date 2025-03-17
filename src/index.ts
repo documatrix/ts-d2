@@ -1,9 +1,10 @@
 import { Border, SideBorders } from "./Border";
 import { Color, Colors } from "./Color";
+import { Connection } from "./Connection";
 import Content from "./Content";
 import { Font, StandardFonts } from "./Font";
 import * as Measure from "./Measure";
-import { OutputFormat } from "./OutputFormat";
+import * as Output from "./OutputFormat";
 import { ParagraphFormat } from "./ParagraphFormat";
 
 export default {
@@ -15,12 +16,13 @@ export default {
     Color,
     Colors,
   },
+  Connection,
   Content,
   Font: {
     Font,
     StandardFonts,
   },
   Measure,
-  OutputFormat,
+  Output,
   ParagraphFormat,
 };
