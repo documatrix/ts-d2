@@ -33,7 +33,8 @@
     "format": "dprint fmt",
     "lint": "eslint src --ext .ts",
     "prepare": "husky",
-    "test": "jest"
+    "test": "jest",
+    "prepublish": "npm run build"
   },
   "husky": {
     "hooks": {
