@@ -44,6 +44,7 @@ The following leaf elements are currently supported:
 * Footer
 * Formatted (may be used to directly insert docTYPE code and/or HTML code)
 * Header
+* Linebreak
 * Pagebreak
 * PageDefinition (only useful for page-based formats)
 * Paragraph
@@ -84,7 +85,6 @@ The following branch elements are supported:
 * Directory
 * Document
 * Footer
-* Formatted
 * Header
 * Paragraph
 * Span
