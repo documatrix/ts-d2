@@ -6,6 +6,32 @@ import Proto from "docframe-types";
 import { Document } from "content/Document";
 import { OutputParams } from "~/OutputFormat";
 
+export type DocPipeParams = {
+  application?: string;
+  client?: string;
+  instance?: string;
+  inputQueue?: string;
+  jobFinishedCallbacks?: CallbackUrlParams[];
+};
+
+export enum RetryType {
+  NO_RETRY = 0,
+  EXPONENTIAL_BACKOFF = 1,
+  FIXED_INTERVAL = 2,
+}
+
+export type CallbackUrlParams = {
+  externalId: string;
+  url: string;
+  headers?: { [key: string]: string };
+  retryPolicy?: [{
+    interval: number;
+    maxRetries: number;
+    type: RetryType;
+  }];
+  timeout?: number;
+};
+
 export class Connection {
   url: string;
   token: string;
@@ -23,6 +49,7 @@ export class Connection {
     format: K,
     doc: Document,
     outputParams?: OutputParams[K],
+    docpipeParams?: DocPipeParams,
   ): Promise<Blob> {
     const node = doc.toDocFrame();
 
@@ -50,6 +77,13 @@ export class Connection {
       contentType: "application/protobuf",
       filename: "data.proto",
     });
+
+    if (docpipeParams) {
+      form.append("job-params", JSON.stringify(docpipeParams), {
+        contentType: "application/json",
+        filename: "job-params",
+      });
+    }
 
     return new Promise((resolve, reject) => {
       axios
