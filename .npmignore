@@ -7,5 +7,6 @@ test
 renovate.json
 .prettierignore
 .yarn
+.npmrc
 
 CHANGELOG.md
