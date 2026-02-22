@@ -1,6 +1,7 @@
 import Proto from "docframe-types";
 
 export type AbsoluteMeasureUnit = "pt" | "cm" | "mm" | "in" | "px";
+
 export type RelativeMeasureUnit = "%";
 export type MeasureUnit = AbsoluteMeasureUnit | RelativeMeasureUnit;
 
@@ -61,19 +62,6 @@ export class Measure<Unit = MeasureUnit> {
 
 export class AbsoluteMeasure extends Measure<AbsoluteMeasureUnit> {}
 
-export class RelativeMeasure extends Measure<RelativeMeasureUnit> {
-  constructor(value: number) {
-    super(value, "%");
-  }
-}
-
-export type Sides<T> = {
-  top?: T;
-  right?: T;
-  bottom?: T;
-  left?: T;
-};
-
 export class SideMeasures {
   value: Sides<AbsoluteMeasure>;
 
@@ -90,3 +78,26 @@ export class SideMeasures {
     });
   }
 }
+
+
+export class Sides<T> {
+  top?: T;
+  right?: T;
+  bottom?: T;
+  left?: T;
+}
+
+/*
+
+
+
+export class RelativeMeasure extends Measure<RelativeMeasureUnit> {
+  constructor(value: number) {
+    super(value, "%");
+  }
+}
+
+
+
+
+*/

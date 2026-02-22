@@ -1,5 +1,5 @@
-import { describe, it } from "@jest/globals";
-import { PageDefinitions } from "content/PageDefinition";
+import { describe, it } from "vitest";
+import { PageDefinitions } from "Content/PageDefinition";
 import { Document } from "content/Document";
 
 describe("Document", () => {

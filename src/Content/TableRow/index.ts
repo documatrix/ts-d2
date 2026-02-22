@@ -2,7 +2,7 @@ import Proto from "docframe-types";
 
 import { BranchDocumentElement } from "content/BranchDocumentElement";
 import { Content } from "content/DocumentElement";
-import { AbsoluteMeasure } from "~/Measure/Measure";
+import { AbsoluteMeasure } from "~/Measure";
 
 export interface TableRowProperties {
   minHeight?: AbsoluteMeasure;

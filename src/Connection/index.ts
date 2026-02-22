@@ -1,18 +1,22 @@
 import axios from "axios";
 import FormData from "form-data";
+import dotenv from "dotenv";
 
 import Proto from "docframe-types";
 
 import { Document } from "content/Document";
 import { OutputParams } from "~/OutputFormat";
 
+// Load environment variables from .env file
+dotenv.config();
+
 export class Connection {
   url: string;
   token: string;
 
-  constructor(url: string = "http://localhost:8080", token: string = "") {
-    this.url = url;
-    this.token = token;
+  constructor(url?: string, token?: string) {
+    this.url = url || process.env.DOCPIPE_URL || "http://localhost:8080";
+    this.token = token || process.env.DOCPIPE_TOKEN || "";
   }
 
   get docframeCallUrl() {
@@ -23,6 +27,7 @@ export class Connection {
     format: K,
     doc: Document,
     outputParams?: OutputParams[K],
+    jobParams?: Record<string, any>,
   ): Promise<Blob> {
     const node = doc.toDocFrame();
 
@@ -38,6 +43,13 @@ export class Connection {
       meta = {
         ...meta,
         ...outputParams,
+      };
+    }
+
+    if (jobParams) {
+      meta = {
+        ...meta,
+        ...jobParams,
       };
     }
 

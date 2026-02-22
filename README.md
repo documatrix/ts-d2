@@ -11,6 +11,28 @@ The following output formats are supported:
 * Images (BMP, PNG and more)
 * PostScript
 
+## Configuration
+
+Before using the library, you need to configure your docPIPE API connection. Create a `.env` file in your project root:
+
+```bash
+cp .env.example .env
+```
+
+Then edit the `.env` file and set your docPIPE API credentials:
+
+```bash
+# The URL of your docPIPE API server
+DOCPIPE_URL=http://localhost:8080
+
+# Your docPIPE API authentication token
+DOCPIPE_TOKEN=your-token-here
+```
+
+**Note:** The `.env` file is already included in `.gitignore` to prevent accidentally committing sensitive credentials.
+
+## Usage
+
 This is a small example creating a document with the content "Hello World" as PDF:
 
 ```typescript
@@ -21,6 +43,27 @@ new Deuterium.Content.Document("Hello World")
   .convertTo(Deuterium.OutputFormat.PDF)
   .then(async (buffer) => {
     // save blob to file
+    fs.writeFileSync("output.pdf", Buffer.from(await buffer.arrayBuffer()));
+  });
+```
+
+### Custom Connection
+
+By default, the library uses the connection credentials from your `.env` file. If you need to use different credentials for a specific conversion, you can create a custom `Connection` instance:
+
+```typescript
+import Deuterium from "ts-d2";
+
+// Create a custom connection with different credentials
+const customConnection = new Deuterium.Connection(
+  "https://api.example.com",
+  "custom-token-here"
+);
+
+// Use the custom connection for conversion
+const doc = new Deuterium.Content.Document("Hello World");
+customConnection.convertTo(Deuterium.OutputFormat.PDF, doc)
+  .then(async (buffer) => {
     fs.writeFileSync("output.pdf", Buffer.from(await buffer.arrayBuffer()));
   });
 ```
@@ -106,4 +149,25 @@ Especially the first variant of the content parameter can result in small code:
 
 ```typescript
 new Deuterium.Content.Footer("...");
+```
+
+# Contributing
+
+Contributions to this project are very welcome. If you want to contribute, please create a pull request with your changes and a description of what you have done.
+
+## Building the project
+
+To build the project, you need to have Node.js and npm installed. Then you can run the following command in the project directory:
+
+```bash
+pnpm install
+pnpm run build
+```
+
+## Testing the project
+
+To run the tests, you can use the following command:
+
+```bash
+pnpm run test
 ```

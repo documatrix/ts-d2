@@ -11,7 +11,7 @@ import { PageDefinition, PageDefinitions } from "content/PageDefinition";
 import { ParagraphFormat } from "~/ParagraphFormat";
 import { SpaceVertically } from "content/SpaceVertically";
 import { StandardFonts } from "~/Font";
-import { AbsoluteMeasure } from "~/Measure/Measure";
+import { AbsoluteMeasure } from "~/Measure";
 
 export interface DocumentProperties {
   pageDefinition: PageDefinition;

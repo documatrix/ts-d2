@@ -1,17 +1,11 @@
-import type { Options } from "tsup";
+import { defineConfig } from 'tsup'
 
-const env = process.env.NODE_ENV;
-
-export const tsup: Options = {
-  splitting: true,
-  sourcemap: env === "development",
-  clean: true,
+export default defineConfig({
+  entry: ['src/index.ts'],
+  format: ['cjs', 'esm'],
   dts: true,
-  format: ["cjs", "esm"],
-  minify: false,
-  bundle: true,
-  skipNodeModulesBundle: true,
-  entryPoints: ["src/index.ts"],
-  watch: env === "development",
-  target: "node16",
-};
+  splitting: false,
+  sourcemap: true,
+  clean: true,
+  target: 'node16',
+})
