@@ -1,6 +1,6 @@
 {
   "name": "ts-d2",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Deuterium is a TypeScript library for professional output creation.",
   "keywords": [
     "pdf",
@@ -40,7 +40,7 @@
     "dev": "tsup --watch",
     "format": "dprint fmt",
     "lint": "eslint src --ext .ts",
-    "prepublish": "pnpm run build",
+    "prepublish": "npm run build",
     "test": "vitest"
   },
   "files": [
@@ -48,14 +48,14 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "pnpm format && pnpm lint",
+      "pre-commit": "npm format && npm lint",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "devDependencies": {
     "@types/uuid": "^10.0.0",
     "dprint": "^0.51.1",
-    "eslint": "9.22.0",
+    "eslint": "10.0.1",
     "husky": "^9.1.7",
     "tsup": "8.5.1",
     "typescript": "5.9.3",
