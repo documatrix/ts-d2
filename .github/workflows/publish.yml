@@ -49,6 +49,15 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
 
+      - name: Debug identity context
+        run: |
+          echo "repo=$GITHUB_REPOSITORY"
+          echo "workflow_ref=$GITHUB_WORKFLOW_REF"
+          echo "ref=$GITHUB_REF"
+          echo "event=$GITHUB_EVENT_NAME"
+          echo "actor=$GITHUB_ACTOR"
+          echo "sha=$GITHUB_SHA"
+
       - name: Publish to npm (OIDC Trusted Publishing)
         run: |
           unset NODE_AUTH_TOKEN
