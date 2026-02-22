@@ -19,17 +19,17 @@ jobs:
     name: Node.js ${{ matrix.node }}
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v4
         with:
-          version: 7.20.0
+          version: 9
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
       - name: Install deps
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: Linting
         run: pnpm lint
       - name: Test
