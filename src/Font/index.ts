@@ -1,4 +1,4 @@
-import { ProtoFont } from "docframe-types";
+import Proto from "docframe-types";
 
 export class Font {
   private name: string;
@@ -7,8 +7,8 @@ export class Font {
     this.name = name;
   }
 
-  public toDocFrame(): ProtoFont {
-    return ProtoFont.create({
+  public toDocFrame(): Proto.ProtoFont {
+    return Proto.ProtoFont.create({
       name: this.name,
       // TODO: suppot font mapping for docframe step
       id: 5

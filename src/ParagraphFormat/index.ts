@@ -1,4 +1,4 @@
-import Proto, { IProtoParagraphFormat } from "docframe-types";
+import Proto from "docframe-types";
 import { v4 as uuidv4 } from "uuid";
 import { AbsoluteMeasure } from "~/Measure";
 import { Font } from "~/Font";
@@ -35,7 +35,7 @@ export class ParagraphFormat {
   }
 
   public toDocFrame(): Proto.IProtoParagraphFormat {
-    let format: IProtoParagraphFormat = {
+    let format: Proto.IProtoParagraphFormat = {
       default: Proto.ProtoBoxedBool.create({
         isNull: false,
         value: this.props.default || false,

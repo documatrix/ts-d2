@@ -160,8 +160,8 @@ Contributions to this project are very welcome. If you want to contribute, pleas
 To build the project, you need to have Node.js and npm installed. Then you can run the following command in the project directory:
 
 ```bash
-pnpm install
-pnpm run build
+npm ci
+npm run build
 ```
 
 ## Testing the project
@@ -169,5 +169,5 @@ pnpm run build
 To run the tests, you can use the following command:
 
 ```bash
-pnpm run test
+npm run test
 ```

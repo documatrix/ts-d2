@@ -1,4 +1,4 @@
-import { Node } from "docframe-types";
+import Proto from "docframe-types";
 import { Content, DocumentElement } from "content/DocumentElement";
 import { Text } from "content/Text";
 
@@ -35,7 +35,7 @@ export abstract class BranchDocumentElement<P = never> extends DocumentElement {
     this.children.unshift(child);
   }
 
-  public childrenToDocFrame(): Node[] {
+  public childrenToDocFrame(): Proto.Node[] {
     return this.children.map((child) => child.toDocFrame());
   }
 
