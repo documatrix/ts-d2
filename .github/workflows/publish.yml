@@ -48,4 +48,12 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+
+      - name: Debug npm auth env
+        run: |
+          echo "NODE_AUTH_TOKEN is set? " $([ -n "${NODE_AUTH_TOKEN}" ] && echo yes || echo no)
+          echo "NPM_TOKEN is set? " $([ -n "${NPM_TOKEN}" ] && echo yes || echo no)
+          npm config get userconfig
+          npm config get registry
+
       - run: pnpm publish --no-git-checks --access public
