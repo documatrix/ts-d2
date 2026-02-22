@@ -15,53 +15,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          version: 9
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
 
   publish-npm:
     needs: build
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run build
-
-      - name: Debug identity context
-        run: |
-          echo "repo=$GITHUB_REPOSITORY"
-          echo "workflow_ref=$GITHUB_WORKFLOW_REF"
-          echo "ref=$GITHUB_REF"
-          echo "event=$GITHUB_EVENT_NAME"
-          echo "actor=$GITHUB_ACTOR"
-          echo "sha=$GITHUB_SHA"
-
-      - name: Publish to npm (OIDC Trusted Publishing)
-        run: |
-          unset NODE_AUTH_TOKEN
-          unset NPM_TOKEN
-          export NPM_CONFIG_USERCONFIG=$PWD/.npmrc.ci
-          : > $NPM_CONFIG_USERCONFIG
-          npm publish --access public
+          node-version: 24
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
