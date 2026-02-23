@@ -1,3 +1,4 @@
+import { Alignment } from "./Alignment";
 import { Border, SideBorders } from "./Border";
 import { Color, Colors } from "./Color";
 import { Connection } from "./Connection";
@@ -8,6 +9,7 @@ import * as Output from "./OutputFormat";
 import { ParagraphFormat } from "./ParagraphFormat";
 
 export default {
+  Alignment,
   Border: {
     Border,
     SideBorders,

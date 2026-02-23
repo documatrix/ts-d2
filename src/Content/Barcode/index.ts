@@ -7,7 +7,7 @@ import {
   referencePointToDocFrame,
 } from "content/ReferencePoint";
 
-interface BarcodeProperties {
+export interface BarcodeProperties {
   type: Proto.ProtoBarcodeType;
   x: AbsoluteMeasure;
   y: AbsoluteMeasure;
@@ -21,6 +21,10 @@ interface BarcodeProperties {
   height: AbsoluteMeasure;
   data: string;
   positionAbsolute: boolean;
+  padding?: AbsoluteMeasure;
+  code?: string;
+  altText?: string;
+  uuid?: string;
 }
 
 export class Barcode extends DocumentElement {
@@ -45,9 +49,12 @@ export class Barcode extends DocumentElement {
 
         width: this.props.width.toDocFrame(),
         height: this.props.height.toDocFrame(),
-        padding: Measure.zero.toDocFrame(),
+        padding: (this.props.padding ?? Measure.zero).toDocFrame(),
 
         data: this.props.data,
+        code: this.props.code,
+        altText: this.props.altText,
+        uuid: this.props.uuid,
       }),
     });
   }

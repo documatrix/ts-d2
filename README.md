@@ -80,23 +80,17 @@ All the supported DocumentElements are placed in the package `Deuterium.Content`
 
 ## Leaf elements
 
-The following leaf elements are currently supported:
-* Barcode
-* ColumnDefinition (only useful for page-based formats)
-* Directory
-* Footer
-* Formatted (may be used to directly insert docTYPE code and/or HTML code)
-* Header
-* Linebreak
-* Pagebreak
-* PageDefinition (only useful for page-based formats)
-* Paragraph
-* SpaceVertically
-* Span
-* Table
-* TableCell
-* TableRow
-* Text
+Leaf elements have no children. The following leaf elements are supported:
+
+* **Barcode** -- renders a barcode (QR, Code128, etc.) with configurable position, size and rotation
+* **Linebreak** -- inserts a line break
+* **Image** -- embeds an image with support for scaling, cropping, flipping, rotation and absolute positioning
+* **Pagebreak** -- inserts a page break
+* **Rule** -- draws a horizontal or vertical line with configurable style (solid, dashed, dotted, double, etc.), color and thickness
+* **SpaceVertically** -- inserts vertical whitespace of a given height
+* **Tag** -- inserts a named tag with optional parameters
+* **Text** -- renders a plain text string
+* **Variable** -- inserts a dynamic variable (data path, page number, date, etc.)
 
 Any leaf element may be added to multiple branch elements (there is no connection from a leaf element to its parent element).
 
@@ -118,6 +112,63 @@ new Deuterium.Content.Span("Hello World!", {
 });
 ```
 
+### Image
+
+```typescript
+new Deuterium.Content.Image({
+  /* Currently only images located on the docPIPE server are supported. */
+  src: "logo.png",
+  alt: "Company Logo",
+  width: new Deuterium.Measure.AbsoluteMeasure(200, "pt"),
+  height: new Deuterium.Measure.AbsoluteMeasure(100, "pt"),
+  scaleType: "absolute",
+});
+```
+
+### Variable
+
+Variables can display dynamic data or special values like page numbers:
+
+```typescript
+// Data variable
+new Deuterium.Content.Variable({ path: "customer.name" });
+
+// Page number
+new Deuterium.Content.Variable({ specialType: "cur-page" });
+
+// Total page count
+new Deuterium.Content.Variable({ specialType: "page-count" });
+```
+
+### Rule
+
+```typescript
+new Deuterium.Content.Rule({
+  width: new Deuterium.Measure.AbsoluteMeasure(400, "pt"),
+  thickness: new Deuterium.Measure.AbsoluteMeasure(1, "pt"),
+  color: Deuterium.Color.Colors.black,
+  style: "solid",
+});
+```
+
+### Barcode
+
+```typescript
+import Proto from "docframe-types";
+
+new Deuterium.Content.Barcode({
+  type: Proto.ProtoBarcodeType.QRCODE,
+  data: "https://example.com",
+  x: new Deuterium.Measure.AbsoluteMeasure(0, "pt"),
+  y: new Deuterium.Measure.AbsoluteMeasure(0, "pt"),
+  width: new Deuterium.Measure.AbsoluteMeasure(100, "pt"),
+  height: new Deuterium.Measure.AbsoluteMeasure(100, "pt"),
+  referencePoint: "top-left",
+  rotation: 0,
+  positionAbsolute: false,
+});
+```
+
 ## Branch elements
 
 Branch elements have two functionalities:
@@ -125,15 +176,31 @@ Branch elements have two functionalities:
 * Apply formatting/properties to their child elements.
 
 The following branch elements are supported:
-* Directory
-* Document
-* Footer
-* Header
-* Paragraph
-* Span
-* Table
-* TableCell
-* TableRow
+
+* **AdjustHorizontally** -- adjusts font size within min/max bounds to fit content horizontally
+* **AdvancedIllustrationArea** -- a positioned area for illustrations with text flow control
+* **CarryOver** -- defines content carried over when a table breaks across pages
+* **Condition** -- conditionally includes content based on a code expression
+* **Directory** -- groups elements with optional name, editability and semantic type
+* **Document** -- the root element; holds page/column definitions, paragraph formats and all content
+* **Footer** -- defines page footer content with configurable mode (append, extend, replace)
+* **Header** -- defines page header content with configurable mode (append, extend, replace)
+* **Indentation** -- applies left/right indentation to its children
+* **Link** -- wraps content in a hyperlink
+* **Loop** -- iterates over a data path, rendering children for each entry
+* **LoopEntry** -- represents a single entry inside a Loop
+* **PageCondition** -- conditionally includes content evaluated per page
+* **Paragraph** -- groups inline content under a named paragraph format with optional overrides
+* **Section** -- defines a document section, optionally with its own column definition
+* **Selection** -- groups selectable entries (single or multi-select)
+* **SelectionEntry** -- a single option inside a Selection
+* **Span** -- applies inline formatting (bold, italic, underline, strikethrough, color, sub/superscript)
+* **SubTotal** -- defines a sub-total area for tables (e.g. running totals)
+* **Table** -- a table element with configurable width, offset and repeating headers
+* **TableCell** -- a table cell with alignment, background color, borders, padding, margin and rotation
+* **TableContentGroup** -- groups table rows (e.g. header group, body group, footer group)
+* **TableRow** -- a table row with optional minimum height
+* **WsArea** -- wraps content to control widow/orphan and page-split behavior
 
 ### Content parameter
 
@@ -150,6 +217,108 @@ Especially the first variant of the content parameter can result in small code:
 ```typescript
 new Deuterium.Content.Footer("...");
 ```
+
+### Span
+
+```typescript
+new Deuterium.Content.Span("Important!", {
+  bold: true,
+  italic: true,
+  color: Deuterium.Color.Color.rgb(255, 0, 0),
+  underline: true,
+});
+```
+
+### Link
+
+```typescript
+new Deuterium.Content.Link("Click here", "https://example.com");
+```
+
+### Table
+
+```typescript
+new Deuterium.Content.Table(
+  new Deuterium.Content.TableRow([
+    new Deuterium.Content.TableCell("Column 1", {
+      border: new Deuterium.Border.SideBorders({
+        bottom: new Deuterium.Border.Border(
+          new Deuterium.Measure.AbsoluteMeasure(1, "pt"),
+          Deuterium.Color.Colors.black,
+        ),
+      }),
+    }),
+    new Deuterium.Content.TableCell("Column 2"),
+  ]),
+  { repeatHeader: 1 },
+);
+```
+
+### Header and Footer
+
+```typescript
+new Deuterium.Content.Header("Page header content", { mode: "replace" });
+new Deuterium.Content.Footer("Page footer content", { mode: "append" });
+```
+
+### Condition
+
+```typescript
+new Deuterium.Content.Condition(
+  "This is only shown when the condition is true",
+  { code: "data.showSection === true", result: true },
+);
+```
+
+### Loop
+
+```typescript
+new Deuterium.Content.Loop(
+  new Deuterium.Content.Variable({ path: "item.name" }),
+  { path: "items" },
+);
+```
+
+### Indentation
+
+```typescript
+new Deuterium.Content.Indentation(
+  "This text is indented",
+  { left: new Deuterium.Measure.AbsoluteMeasure(30, "pt") },
+);
+```
+
+## Support classes
+
+In addition to the document elements, the library provides several support classes:
+
+* **Deuterium.Alignment** -- predefined horizontal (Left, Center, Right, Justify, FullJustify) and vertical (Top, Middle, Bottom) alignment values
+* **Deuterium.Border** -- `Border` (weight + color) and `SideBorders` (top/right/bottom/left)
+* **Deuterium.Color** -- `Color.rgb()`, `Color.cmyk()`, `Color.fromHex()` factory methods and preset `Colors` (black, white)
+* **Deuterium.Font** -- `Font` class and `StandardFonts` (Helvetica)
+* **Deuterium.Measure** -- `AbsoluteMeasure` (pt, cm, mm, in, px), `Measure` (also supports %), `SideMeasures` and `Sides`
+* **Deuterium.ParagraphFormat** -- defines named paragraph formats with font, size, line feed, spacing, alignment, bold/italic and indentation
+
+## Page layout
+
+For page-based output formats (PDF, PostScript), you can configure page size and column layout:
+
+```typescript
+const doc = new Deuterium.Content.Document("Content", {
+  pageDefinition: new Deuterium.Content.PageDefinition(
+    new Deuterium.Measure.AbsoluteMeasure(595, "pt"),
+    new Deuterium.Measure.AbsoluteMeasure(842, "pt"),
+  ),
+  columnDefinition: new Deuterium.Content.ColumnDefinition({
+    position: Deuterium.Content.ColumnPosition.Center,
+    interColumnSpace: new Deuterium.Measure.AbsoluteMeasure(0, "pt"),
+    positionOffset: new Deuterium.Measure.AbsoluteMeasure(70, "pt"),
+    width: new Deuterium.Measure.AbsoluteMeasure(490, "pt"),
+  }),
+});
+```
+
+Predefined page sizes are available via `PageDefinitions` (A3, A4, A5) and column presets via `ColumnDefinitions`.
 
 # Contributing
 

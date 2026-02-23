@@ -7,6 +7,8 @@ import { Measure } from "~/Measure";
 export interface TableSettings {
   width?: Measure;
   xOffset?: Measure;
+  leftMeasure?: boolean;
+  repeatHeader?: number;
 }
 
 export class Table extends BranchDocumentElement<TableSettings> {
@@ -20,16 +22,25 @@ export class Table extends BranchDocumentElement<TableSettings> {
   public toDocFrame(): Proto.Node {
     const props = this.props!;
 
+    const settings: Proto.IProtoTableSettings = {
+      width: props.width?.toDocFrame(),
+      xOffset: props.xOffset?.toDocFrame(),
+      leftMeasure: Proto.ProtoBoxedBool.create({
+        isNull: false,
+        value: props.leftMeasure ?? false,
+      }),
+    };
+
+    if (props.repeatHeader !== undefined) {
+      settings.repeatHeader = Proto.ProtoBoxedUint32.create({
+        isNull: false,
+        value: props.repeatHeader,
+      });
+    }
+
     return Proto.Node.create({
       table: Proto.ProtoTable.create({
-        settings: Proto.ProtoTableSettings.create({
-          width: props.width?.toDocFrame(),
-          leftMeasure: Proto.ProtoBoxedBool.create({
-            isNull: false,
-            value: false,
-          }),
-          xOffset: props.xOffset?.toDocFrame(),
-        }),
+        settings: Proto.ProtoTableSettings.create(settings),
       }),
       children: this.childrenToDocFrame(),
     });
