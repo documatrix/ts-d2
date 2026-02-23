@@ -67,12 +67,26 @@ export class Document extends BranchDocumentElement<DocumentProperties> {
   convertTo<Format extends keyof OutputParams>(
     outputFormat: Format,
     outputParams?: OutputParams[Format],
+    jobParams?: Record<string, any>,
   ): Promise<Blob> {
-    return defaultConnection.convertTo(outputFormat, this, outputParams);
+    return defaultConnection.convertTo(
+      outputFormat,
+      this,
+      outputParams,
+      jobParams,
+    );
   }
 
-  convertToPDF(outputParams?: OutputParams["pdf"]): Promise<Blob> {
-    return defaultConnection.convertTo(OutputFormat.PDF, this, outputParams);
+  convertToPDF(
+    outputParams?: OutputParams["pdf"],
+    jobParams?: Record<string, any>,
+  ): Promise<Blob> {
+    return defaultConnection.convertTo(
+      OutputFormat.PDF,
+      this,
+      outputParams,
+      jobParams,
+    );
   }
 
   /*

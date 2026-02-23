@@ -40,12 +40,26 @@ import * as fs from "fs";
 import Deuterium from "ts-d2";
 
 new Deuterium.Content.Document("Hello World")
-  .convertTo(Deuterium.OutputFormat.PDF)
+  .convertTo(Deuterium.Output.OutputFormat.PDF)
   .then(async (buffer) => {
     // save blob to file
     fs.writeFileSync("output.pdf", Buffer.from(await buffer.arrayBuffer()));
   });
 ```
+
+### Job Parameters
+
+Both `convertTo` and `convertToPDF` accept an optional `jobParams` argument — a free-form object that is merged into the request metadata sent to the docPIPE server:
+
+```typescript
+new Deuterium.Content.Document("Hello World")
+  .convertTo(Deuterium.Output.OutputFormat.PDF, undefined, { locale: "en-US" })
+  .then(async (buffer) => {
+    fs.writeFileSync("output.pdf", Buffer.from(await buffer.arrayBuffer()));
+  });
+```
+
+These job parameters are available in docPIPE as job variables.
 
 ### Custom Connection
 
@@ -62,7 +76,7 @@ const customConnection = new Deuterium.Connection(
 
 // Use the custom connection for conversion
 const doc = new Deuterium.Content.Document("Hello World");
-customConnection.convertTo(Deuterium.OutputFormat.PDF, doc)
+customConnection.convertTo(Deuterium.Output.OutputFormat.PDF, doc)
   .then(async (buffer) => {
     fs.writeFileSync("output.pdf", Buffer.from(await buffer.arrayBuffer()));
   });
